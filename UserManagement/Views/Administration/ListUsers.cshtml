@@ -1,0 +1,76 @@
+﻿@model IEnumerable<User>
+@inject SignInManager<User> signInManager;
+@{
+    ViewData["Title"] = "ListUsers";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="container">
+    <h2>Add a new User</h2>
+
+    <a class="btn btn-primary mb-3" asp-action="Register" asp-controller="Account">
+        Add new User
+    </a>
+    <table class="table table-bordered table-hover">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Email</th>
+                <th></th>
+                <th></th>
+                @if(@signInManager.IsSignedIn(User) && @User.IsInRole("Admin") )
+                {
+                    <th></th>
+                }
+                
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var user in Model)
+            {
+            <tr>
+                <td>@user.Id</td>
+                <td>@user.Email</td>
+                <td><a class="btn btn-warning" style="margin-left:16%" asp-controller="Administration" asp-action="EditUser" asp-route-id="@user.Id">Edit </a></td>
+                <td>
+                    <a class="btn btn-danger" style="margin-left:16%"  onclick="return confirm('Are you sure you want to delete user : @user.UserName')" asp-controller="Administration" asp-action="DeleteUser" 
+                       asp-route-id="@user.Id"> Delete </a>
+                </td>
+               
+
+
+                @if (@signInManager.IsSignedIn(User) && @User.IsInRole("Admin") && user.Approved == false)
+                {
+
+                    <td><a class="btn btn-info" data-toggle="modal" data-target="#modal2" style="margin-left:16%">Approval</a></td>
+                    //modal to confirm approval
+                    <div class="modal fade" id="modal2" role="dialog">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h4 class="modal-title text-center">Do you want approval this user </h4>
+                                </div>
+                                <div class="modal-body">
+                                    <a class=" btn btn-info" style="margin-left: 39%;" asp-action="ApprovedUser"
+                                       asp-controller="Administration" asp-route-id="@user.Id">
+                                        Approval
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+                else if (@signInManager.IsSignedIn(User) && @User.IsInRole("Admin") && user.Approved == true)
+                {
+                    <td> <span class="text-center" style="display:block">Submited</span> </td>
+                }
+            </tr>
+                <!-- Modal content-->
+
+            }
+           
+
+        </tbody>
+    </table>
+</div>
+
+

@@ -1,0 +1,67 @@
+﻿@model IEnumerable<IdentityRole>
+@{
+    ViewData["Title"] = "List Roles";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+    <div class="container">
+        <h2>Add a new Role</h2>
+
+        <a class="btn btn-primary mb-3" asp-action="AddANewRole" asp-controller="Administration">
+            Add new Role
+        </a>
+        <a class="btn btn-primary mb-3" asp-action="AddUserToRole" asp-controller="Administration">
+            Add User to Role
+        </a>
+        <table class="table table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th><span style="margin-left:29%;display:block">Name</span></th>
+                    <th></th>
+                    <th></th>
+
+
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var role in Model)
+                {
+                    <tr>
+                        <td>@role.Id</td>
+                        <td><span style="margin-left:29%;display:block">@role.Name</span></td>
+                        <td><a class="btn btn-warning" style="margin-left:29%" asp-controller="Administration" asp-action="EditRole" asp-route-id="@role.Id">Edit </a></td>
+                        <td>
+
+                            <a class="btn btn-danger modal-open" style="margin-left:29%" data-toggle="modal"
+                               data-target="#modal"> Delete </a>
+                            <div class="modal fade" id="modal" role="dialog">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h4 class="modal-title text-center">Do you want delete this role </h4>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form>
+                                                <button class=" btn btn-info" style="margin-left: 41%;" asp-action="DeleteRole"
+                                                        asp-controller="Administration" asp-route-id="@role.Id">
+                                                    Delete
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+
+
+                    </tr>
+
+
+                }
+
+
+            </tbody>
+        </table>
+    </div>
+
+
